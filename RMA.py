@@ -131,7 +131,7 @@ def Simulation(tasks, hp):
             dList[RealTime_task[priority]["name"]]["start"].append(t)
             dList[RealTime_task[priority]["name"]]["finish"].append(t+1)
             # For plotting the results
-            y_axis.append("TASK%d"%priority)
+            y_axis.append(RealTime_task[priority]["name"])
             from_x.append(t)
             to_x.append(t+1)
 

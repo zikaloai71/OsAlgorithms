@@ -1,9 +1,10 @@
 # Import modules
+import matplotlib
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
-
+matplotlib.use('Qt5Agg')
 
 
 def EDF (tasks, maxTime) :
@@ -29,7 +30,7 @@ def EDF (tasks, maxTime) :
         if ready_queue:
             current_task = ready_queue.pop(0)
             schedule.append((time, current_task["name"]))
-            time += current_task["executiontTime"]
+            time += current_task["executionTime"]
             
             # If the task misses its deadline, print a warning message and remove it from the ready queue
             if time > current_task["deadLine"]:
@@ -49,7 +50,7 @@ def EDF (tasks, maxTime) :
     )
     for start, name in schedule:
         if name:
-            end = start + [task["executiontTime"] for task in tasks if task["name"] == name][0]
+            end = start + [task["executionTime"] for task in tasks if task["name"] == name][0]
             plt.hlines(
                 y=name,
                 xmin=start,

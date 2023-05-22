@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 from DMA import DMA
 from RMA import RMA
-
+from EDF import EDF
 
 
 class UI:
@@ -217,7 +217,7 @@ class UI:
             elif self.useAlgorithm==2:
                 for arg in range(len(self.rtEntries)):
                          tasks.append({"name": f"T{arg + 1}", "releaseTime": float(self.rtEntries[arg].get()), "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
-                results = edfos(tasks, maxtime).getResults()
+                EDF(tasks, maxtime)
             elif self.useAlgorithm==3:
                 for arg in range(len(self.rtEntries)):
                            tasks.append({"name": f"T{arg + 1}", "releaseTime": float(self.rtEntries[arg].get()), "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
