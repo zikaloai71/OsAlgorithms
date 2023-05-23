@@ -65,7 +65,7 @@ def roundRobin(tasks,quantum, maxTime):
         task_values.append(task_dict[name])
 
     # plot the graph with steps on x-axis and task values on y-axis
-    plt.scatter(steps, task_values)
+    plt.scatter(steps, task_values, c=task_values, cmap='tab10')
     plt.xlabel('Steps')
     plt.xticks(range(maxTime+1))
     plt.yticks(list(task_dict.values()), list(task_dict.keys()))

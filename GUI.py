@@ -10,6 +10,7 @@ from DMA import DMA
 from RMA import RMA
 from EDF import EDF
 from LST import LST
+from RRv2 import roundRobin
 
 class UI:
     def __init__(self):
@@ -29,33 +30,35 @@ class UI:
         self.inputFrame.columnconfigure(0, weight=2)
         self.inputFrame.columnconfigure(6, weight=2)
 
-        self.rtEntries = []   #  to enter release time 
+        
         self.ptEntries = []  #  to enter periodic time 
         self.etEntries = []   #  to enter execution time 
         self.dtEntries = []    #  to enter deadline  time 
+        self.atEntries = []    #  to enter arrival time
+        self.btEntries = []    #  to enter burst time
         self.tasks =[]   #   to enter no. of tasks 
         
 
-        self.algorithm_type = StringVar() #  to choose algorithm type
+      
         #label for input frame tasks number
         Label(self.inputFrame, text="No.Tasks: ", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=1, column=1, pady=5)
         #label for input frame algorithm type
         Label(self.inputFrame, text= "Scheduling type: ", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=2,column=1,pady=5)  
-
-        self.algorithm_chosen = ttk.Combobox(self.inputFrame,width=12, textvariable=self.algorithm_type)
-        self.algorithm_chosen['value']=( "LST", "EDF", "DMA", "RMA")
+        #select box
+        self.algorithm_chosen = ttk.Combobox(self.inputFrame,width=12,justify=CENTER)
+        #options for select box
+        self.algorithm_chosen['value']=( "LST", "EDF", "DMA", "RMA","RR")
         self.algorithm_chosen.grid(row=2,column=2,pady=5)
+        #default value for select box
         self.algorithm_chosen.current(0)
-        self.algorithm_type.set("LST")
+        
 
-
-#       bg background color, fg font color, pad  for padding y direction as canvas composed of x , y 
-        self.useAlgorithm = 0
+        #submit the no. of tasks and the algorithm type
         Button(self.inputFrame, text="submit", font=("times new roman", 10), bg="green", fg="white", command= self.set_algorithm_type).grid(row=3, column=2, pady=5)
       
-
+        
         self.noTasks = IntVar()
-#        Tkinter contains built-in programming types which work like a normal python type with additional features used to manipulate values of widgets like Label and Entry more effectively, which makes them different from python data types.
+
         self.noTasks.set(0)
 
         self.numberOfTasks= Entry(self.inputFrame , validate="key", validatecommand=(self.inputFrame.register(self.validate_input_noTasks), '%P'), textvariable=self.noTasks, font=("times new roman", 12))
@@ -84,17 +87,20 @@ class UI:
             return int(input_str)
     
     def set_algorithm_type(self):
-        if self.algorithm_type.get() == "LST":
+        if self.algorithm_chosen.get() == "LST":
             self.LST()
-        elif self.algorithm_type.get() == "EDF":
+        elif self.algorithm_chosen.get() == "EDF":
             self.EDF()
-        elif self.algorithm_type.get() == "DMA":
+        elif self.algorithm_chosen.get() == "DMA":
             self.DMA()
-        elif self.algorithm_type.get() == "RMA":
+        elif self.algorithm_chosen.get() == "RMA":
             self.RMA()
+        elif self.algorithm_chosen.get() == "RR":
+            self.RR()
         else:
             self.errorMessage("please choose an algorithm to use.")    
         self.refresh()
+       
 #        stop execution of python program
 
     def exit(self):
@@ -103,19 +109,21 @@ class UI:
 
     def LST(self):
         self.algorithmUsed.config(text="Algorithm: Least Slack Time")
-        self.useAlgorithm = 1
+      
 
     def EDF(self):
         self.algorithmUsed.config(text="Algorithm: Earliest Deadline First")
-        self.useAlgorithm = 2
+       
 
     def DMA(self):
         self.algorithmUsed.config(text="Algorithm: Deadline Monotonic Assignment")
-        self.useAlgorithm = 3
+        
 
     def RMA(self):
         self.algorithmUsed.config(text="Algorithm: Rate Monotonic Assignment")
-        self.useAlgorithm = 4
+        
+    def RR(self):
+        self.algorithmUsed.config(text="Algorithm: Round Robin")
 
     def tasksFrame(self):
         my_canvas = Canvas(self.root, bg="#2069e0")
@@ -148,37 +156,51 @@ class UI:
 
         self.second_frame.bind("<Configure>", lambda e: my_canvas.configure(scrollregion=my_canvas.bbox("all")))
 
+        
+        # Add that New frame To a Window In The Canvas
+        my_canvas.create_window((0, 0), window=self.second_frame, anchor="nw", tags='frame')
+
+        self.second_frame.bind("<Configure>", lambda e: my_canvas.configure(scrollregion=my_canvas.bbox("all")))
+
     def task(self, num):
         self.runFrame.pack_forget()
         f = Frame(self.second_frame, bg="#4AA080")
         f.pack(fill=X, expand=True,pady=5)
         self.tasks.append(f)
+        
         Label(f, text=f"Task no.{num}", font=("times new roman", 12, "bold"), bg="#4AA080", fg="white").grid(row=0, column=0)
         Label(f, text="_____________________________________________________________________________________________________", bg="#4AA080", fg="white").grid(row=1, column=0)
 
         f2 = Frame(f, bg="#4AA080")
         f2.grid(row=2, column=0)
         f2.columnconfigure(0, weight=2)
+ 
 
-        Label(f2, text= "Release time: ", font =("times new roman", 12), bg="#4AA080", fg="white").grid(row=0, column=1)
-        rtEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
-        rtEntry.grid(row=0, column=2)
-        self.rtEntries.append(rtEntry)
+        if(self.algorithm_chosen.get() == "RR"):
+            Label(f2, text= "Arrival time: ", font =("times new roman", 12), bg="#4AA080", fg="white").grid(row=0, column=1)
+            arrivalTime = Entry(f2, font=("times new roman", 12), justify= CENTER)
+            arrivalTime.grid(row=0, column=2)
+            self.atEntries.append(arrivalTime)
 
-        Label(f2, text= "Execution time: ", font =("times new roman", 12), bg="#4AA080", fg="white").grid(row=1, column=1)
-        etEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
-        etEntry.grid(row=1, column=2)
-        self.etEntries.append(etEntry)
+            Label(f2, text= "Burst time: ", font =("times new roman", 12), bg="#4AA080", fg="white").grid(row=1, column=1)
+            burstTime = Entry(f2, font=("times new roman", 12), justify= CENTER)
+            burstTime.grid(row=1, column=2)
+            self.btEntries.append(burstTime)
+        else:
+            Label(f2, text= "Execution time: ", font =("times new roman", 12), bg="#4AA080", fg="white").grid(row=1, column=1)
+            etEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
+            etEntry.grid(row=1, column=2)
+            self.etEntries.append(etEntry)
 
-        Label(f2, text= "Period: ", font =("times new roman", 12), bg="#4AA080", fg="white").grid(row=0, column=3)
-        ptEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
-        ptEntry.grid(row=0, column=4)
-        self.ptEntries.append(ptEntry)
+            Label(f2, text= "Period: ", font =("times new roman", 12), bg="#4AA080", fg="white").grid(row=0, column=3)
+            ptEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
+            ptEntry.grid(row=0, column=4)
+            self.ptEntries.append(ptEntry)
 
-        Label(f2, text="Deadline: ", font=("times new roman", 12), bg="#4AA080", fg="white").grid(row=1, column=3)
-        dtEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
-        dtEntry.grid(row=1, column=4)
-        self.dtEntries.append(dtEntry)
+            Label(f2, text="Deadline: ", font=("times new roman", 12), bg="#4AA080", fg="white").grid(row=1, column=3)
+            dtEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
+            dtEntry.grid(row=1, column=4)
+            self.dtEntries.append(dtEntry)
         Label(f, text="_____________________________________________________________________________________________________", bg="#4AA080", fg="white").grid(row=3, column=0)
         self.runFrame.pack()
 
@@ -187,49 +209,60 @@ class UI:
     def refresh(self, *args):
         
         tasksNum = self.get_input_noTasks()
+        
+      
+        for i in range(len(self.tasks)):
+            self.tasks[i].destroy()
 
-        if tasksNum == len(self.tasks):
-            pass
-        if tasksNum > len(self.tasks):  #add more tasks
-            for i in range(len(self.tasks)+1, tasksNum+1):
-                self.task(i)
-        else:
-            for i in range(len(self.tasks)-tasksNum): #remove some tasks
-                self.tasks.pop(-1).destroy()
-                self.rtEntries.pop(-1)
-                self.etEntries.pop(-1)
-                self.ptEntries.pop(-1)
-                self.dtEntries.pop(-1)
+        self.tasks = []
+        self.etEntries = []
+        self.ptEntries = []
+        self.dtEntries = []
+        self.atEntries = []
+        self.btEntries = []
+      
+        for i in range(tasksNum):
+            self.task(i+1)
+        
+      
+           
+      
+    
 
-        if tasksNum == 0:
-            self.runFrame.pack_forget()
+        
+           
 
     def Run(self):
         tasks = []
        
         try:
-            maxtime = int(self.maxtimeEntry.get())
+            maxTime = int(self.maxTimeEntry.get())
+            quantum = int(self.quantumEntry.get())
         except:
             self.errorMessage("Please ensure that the max time is an integer number")
 
 
         if self.checkEntries():
-            if self.useAlgorithm == 1:
-                for arg in range(len(self.rtEntries)):
-                    tasks.append({"name": f"T{arg + 1}", "releaseTime": float(self.rtEntries[arg].get()), "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
-                LST(tasks, maxtime)
-            elif self.useAlgorithm==2:
-                for arg in range(len(self.rtEntries)):
-                         tasks.append({"name": f"T{arg + 1}", "releaseTime": float(self.rtEntries[arg].get()), "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
-                EDF(tasks, maxtime)
-            elif self.useAlgorithm==3:
-                for arg in range(len(self.rtEntries)):
-                           tasks.append({"name": f"T{arg + 1}", "releaseTime": float(self.rtEntries[arg].get()), "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
-                DMA(tasks, maxtime)
-            elif self.useAlgorithm==4:
-                for arg in range(len(self.rtEntries)):
-                           tasks.append({"name": f"T{arg + 1}", "releaseTime": float(self.rtEntries[arg].get()), "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
-                RMA(tasks, maxtime)
+            if self.algorithm_chosen.get() == "LST":
+                for arg in range(len(self.ptEntries)):
+                    tasks.append({"name": f"T{arg + 1}", "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
+                LST(tasks, maxTime)
+            elif self.algorithm_chosen.get() == "EDF":
+                for arg in range(len(self.ptEntries)):
+                         tasks.append({"name": f"T{arg + 1}", "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
+                EDF(tasks, maxTime)
+            elif self.algorithm_chosen.get() == "DMA":
+                for arg in range(len(self.ptEntries)):
+                           tasks.append({"name": f"T{arg + 1}", "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
+                DMA(tasks, maxTime)
+            elif self.algorithm_chosen.get() == "RMA":
+                for arg in range(len(self.ptEntries)):
+                           tasks.append({"name": f"T{arg + 1}", "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
+                RMA(tasks, maxTime)
+            elif self.algorithm_chosen.get() == "RR":
+                for arg in range(len(self.atEntries)):
+                    tasks.append({"name": f"T{arg + 1}", "arrival": float(self.atEntries[arg].get()), "burst": float(self.btEntries[arg].get())})
+                roundRobin(tasks, quantum, maxTime)
             else:
                 self.errorMessage("please choose an algorithm to use.")
         
@@ -239,12 +272,13 @@ class UI:
         messagebox.showerror("Error", msg)
 
     def checkEntries(self):
-        for entry in range(len(self.rtEntries)):
+        for entry in range(len(self.ptEntries)):
             try:
-              float(self.rtEntries[entry].get())
               float(self.ptEntries[entry].get())
               float(self.etEntries[entry].get())
               float(self.dtEntries[entry].get())
+              float(self.atEntries[entry].get())
+              float(self.btEntries[entry].get())
             except:
                 self.errorMessage("Please ensure that all entries are filled either with integer or float numbers")
                 return False
