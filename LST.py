@@ -1,7 +1,9 @@
 # Import modules
+import matplotlib
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+matplotlib.use('Qt5Agg')
 
 def LST (tasks, maxTime) :
     # Hyperperiod or LCM
@@ -95,15 +97,6 @@ def LST (tasks, maxTime) :
 def calculate_slack(task, time):
     return task['deadLine'] - time - task['remaining']
 
-# Define some tasks as a list of dictionaries
-tasks = [
-    {'name': 'T1', 'periodTime': 20, 'deadLine': 7, 'executionTime': 3},
-    {'name': 'T2', 'periodTime': 5, 'deadLine': 4, 'executionTime': 2},
-    {'name': 'T3', 'periodTime': 10, 'deadLine': 8, 'executionTime': 2}
-]
 
-# Calculate the hyper period as the LCM of the periods of all tasks
-hyperperiod = 20
 
-# Simulate the LST scheduling algorithm and plot the output
-LST(tasks, hyperperiod)
+

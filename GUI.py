@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from DMA import DMA
 from RMA import RMA
 from EDF import EDF
-
+from LST import LST
 
 class UI:
     def __init__(self):
@@ -17,12 +17,15 @@ class UI:
         self.root = Tk()    
         #title of window
         self.root.title("Os Project")
-#        name of tinker object we create prefer name it with your project name concatenated with your name 
-        self.root.geometry("530x500+400+100")
+        #size of window and it's position "width x height+top+left"
+        self.root.geometry("650x550+400+100")
+        #background color of window
         self.root.config(bg="red")
-
+        #child of root window for no.of tasks input and choosing algorithm
         self.inputFrame = Frame(self.root, bg="#DDDDDD")
+        #fill x means fill the window in x direction
         self.inputFrame.pack(fill=X)
+        #keep the content of input frame in center when resizing the window 
         self.inputFrame.columnconfigure(0, weight=2)
         self.inputFrame.columnconfigure(6, weight=2)
 
@@ -32,16 +35,18 @@ class UI:
         self.dtEntries = []    #  to enter deadline  time 
         self.tasks =[]   #   to enter no. of tasks 
         
-#        grid    show grid composed of table with no. of rows and no.of column
-        self.algorithm_type = StringVar()
+
+        self.algorithm_type = StringVar() #  to choose algorithm type
+        #label for input frame tasks number
         Label(self.inputFrame, text="No.Tasks: ", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=1, column=1, pady=5)
+        #label for input frame algorithm type
         Label(self.inputFrame, text= "Scheduling type: ", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=2,column=1,pady=5)  
 
         self.algorithm_chosen = ttk.Combobox(self.inputFrame,width=12, textvariable=self.algorithm_type)
-        self.algorithm_chosen['value']=( "MLF", "EDF", "DMA", "RMA")
+        self.algorithm_chosen['value']=( "LST", "EDF", "DMA", "RMA")
         self.algorithm_chosen.grid(row=2,column=2,pady=5)
         self.algorithm_chosen.current(0)
-        self.algorithm_type.set("MLF")
+        self.algorithm_type.set("LST")
 
 
 #       bg background color, fg font color, pad  for padding y direction as canvas composed of x , y 
@@ -79,8 +84,8 @@ class UI:
             return int(input_str)
     
     def set_algorithm_type(self):
-        if self.algorithm_type.get() == "MLF":
-            self.MLF()
+        if self.algorithm_type.get() == "LST":
+            self.LST()
         elif self.algorithm_type.get() == "EDF":
             self.EDF()
         elif self.algorithm_type.get() == "DMA":
@@ -96,8 +101,8 @@ class UI:
         self.root.quit()
         self.root.destroy()
 
-    def MLF(self):
-        self.algorithmUsed.config(text="Algorithm: Minimum Laxity First")
+    def LST(self):
+        self.algorithmUsed.config(text="Algorithm: Least Slack Time")
         self.useAlgorithm = 1
 
     def EDF(self):
@@ -209,11 +214,10 @@ class UI:
 
 
         if self.checkEntries():
-            results = []
             if self.useAlgorithm == 1:
                 for arg in range(len(self.rtEntries)):
                     tasks.append({"name": f"T{arg + 1}", "releaseTime": float(self.rtEntries[arg].get()), "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
-                results = mlfos(tasks, maxtime).getResults()
+                LST(tasks, maxtime)
             elif self.useAlgorithm==2:
                 for arg in range(len(self.rtEntries)):
                          tasks.append({"name": f"T{arg + 1}", "releaseTime": float(self.rtEntries[arg].get()), "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
@@ -228,8 +232,7 @@ class UI:
                 RMA(tasks, maxtime)
             else:
                 self.errorMessage("please choose an algorithm to use.")
-            if results:
-                self.resultsWindow(results)
+        
 
 
     def errorMessage(self, msg):
