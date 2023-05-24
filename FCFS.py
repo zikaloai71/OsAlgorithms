@@ -40,44 +40,40 @@ def drawGantt(tasks, maxtime):
     plt.xticks(range(maxtime+1))
     plt.show()
 
-def FCFS(tasks, maxtime):
-    # Function to find waiting time of all tasks
-    findWaitingTime(tasks)
-    # Display tasks along with all details
-    print("Tasks\t\tBT\t\tPT\t\tWT\t\tTAT")
-    # Calculate total waiting time and total turn around time
-    total_wt = 0
-    total_tat = 0
-    # List to store the order of tasks
-    order = []
-    # Variable to keep track of the current time
-    current_time = 0
-    orderIndex = 0
-    n = len(tasks)
-    for i in range(n):
-        total_wt = total_wt + tasks[i]["waitingTime"]
-        total_tat = total_tat + tasks[i]["turnAroundTime"]
-        print(str(tasks[i]["name"]) + "\t\t" + str(tasks[i]["executionTime"]) + "\t\t" + str(tasks[i]["periodTime"]) + "\t\t" + str(tasks[i]["waitingTime"]) + "\t\t" + str(tasks[i]["turnAroundTime"]))
-        # Append the process id to the order list
-        order.append({"name":tasks[i]["name"], "start_time":current_time, "finish_time":current_time + tasks[i]["executionTime"]})
-        orderIndex += 1
-        # Update the current time
-        current_time += tasks[i]["executionTime"]
-        if(current_time >= maxtime):
-            order[i]["finish_time"] = maxtime
-            print("Time Finished")
-            break
-    print("Average waiting time = " + str(total_wt / n))
-    print("Average turn around time = " + str(total_tat / n))
-    # Print the order of tasks
-    print("Order of tasks: " + str(order))
-    # Draw the gantt chart
-    drawGantt(order, maxtime)
+def FCFS(tasks , maxtime):
+    # Sort tasks based on arrival time (assuming tasks is a list of dictionaries with "arrival" and "burst" keys)
+    sorted_tasks = sorted(tasks, key=lambda x: x["arrival"])
+    order=[]
+    # Calculate waiting time and turn around time for each task
+    waiting_time = 0
+    total_waiting_time = float("-inf")
+    turn_around_time = 0
+    total_turn_around_time = 0
 
-# # Driver code
-# tasks = [
-#     {"name":"Task2", "executionTime":5, "periodTime":15},
-#     {"name":"Task1", "executionTime":10, "periodTime":20},
-#     {"name":"Task3", "executionTime":8, "periodTime":25}
-# ]
-# FCFS(tasks, 20)
+    print("Tasks\t\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time")
+    for task in sorted_tasks:
+        # Calculate waiting time for current task
+        waiting_time = max(total_waiting_time - task["arrival"], 0)
+
+        # Calculate start time for current task
+        start_time = max(task["arrival"], total_waiting_time)
+
+        # Update total waiting time
+        total_waiting_time += task["burst"]
+
+        # Append the task to the order list
+        order.append({"name": task["name"], "start_time": start_time, "finish_time": start_time + task["burst"]})
+
+        # Print task details
+        print(f"{task['name']}\t\t{task['arrival']}\t\t{task['burst']}\t\t{waiting_time}\t\t{turn_around_time}")
+
+
+    # Calculate average waiting time and turn around time
+    n = len(sorted_tasks)
+    average_waiting_time = total_waiting_time / n
+    average_turn_around_time = total_turn_around_time / n
+
+    # Print average waiting time and turn around time
+    print(f"\nAverage Waiting Time: {average_waiting_time}")
+    print(f"Average Turnaround Time: {average_turn_around_time}")
+    drawGantt(order, maxtime)

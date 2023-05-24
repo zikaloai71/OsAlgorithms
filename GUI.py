@@ -1,5 +1,5 @@
 
-from tkinter import * 
+from tkinter import *
 from tkinter import ttk
 
 from tkinter import messagebox
@@ -16,7 +16,7 @@ from FCFS import FCFS
 class UI:
     def __init__(self):
         #create tkinter window
-        self.root = Tk()    
+        self.root = Tk()
         #title of window
         self.root.title("Os Project")
         #size of window and it's position "width x height+top+left"
@@ -41,23 +41,23 @@ class UI:
         self.inputFrame = Frame(self.root, bg="#DDDDDD")
         #fill x means fill the window in x direction
         self.inputFrame.pack(fill=X)
-        #keep the content of input frame in center when resizing the window 
+        #keep the content of input frame in center when resizing the window
         self.inputFrame.columnconfigure(0, weight=2)
         self.inputFrame.columnconfigure(6, weight=2)
 
-        
-        self.ptEntries = []  #  to enter periodic time 
-        self.etEntries = []   #  to enter execution time 
-        self.dtEntries = []    #  to enter deadline  time 
+
+        self.ptEntries = []  #  to enter periodic time
+        self.etEntries = []   #  to enter execution time
+        self.dtEntries = []    #  to enter deadline  time
         self.atEntries = []    #  to enter arrival time
         self.btEntries = []    #  to enter burst time
-        self.tasks =[]   #   to enter no. of tasks 
-        
+        self.tasks =[]   #   to enter no. of tasks
+
 
         #label for input frame tasks number
         Label(self.inputFrame, text="No.Tasks: ", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=1, column=1, pady=5)
         #label for input frame algorithm type
-        Label(self.inputFrame, text= "Scheduling type: ", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=2,column=1,pady=5)  
+        Label(self.inputFrame, text= "Scheduling type: ", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=2,column=1,pady=5)
         #select box
         self.algorithm_chosen = ttk.Combobox(self.inputFrame,width=12,justify=CENTER)
         #options for select box
@@ -65,12 +65,12 @@ class UI:
         self.algorithm_chosen.grid(row=2,column=2,pady=5)
         #default value for select box
         self.algorithm_chosen.current(0)
-        
+
 
         #submit the no. of tasks and the algorithm type
         Button(self.inputFrame, text="submit", font=("times new roman", 10), bg="green", fg="white", command= self.set_algorithm_type).grid(row=3, column=2, pady=5)
-      
-        
+
+
         self.noTasks = IntVar()
 
         self.noTasks.set(0)
@@ -84,7 +84,7 @@ class UI:
 
         self.root.protocol("WM_DELETE_WINDOW", self.exit)
         self.root.mainloop()
-   
+
     def validate_input_noTasks(input_string):
         if int(input_string):
             return True
@@ -99,7 +99,7 @@ class UI:
             return 0
         else:
             return int(input_str)
-    
+
     def set_algorithm_type(self):
         if self.algorithm_chosen.get() == "LST":
             self.LST()
@@ -114,9 +114,9 @@ class UI:
         elif self.algorithm_chosen.get() == "FCFS":
             self.FCFS()
         else:
-            self.errorMessage("please choose an algorithm to use.")    
+            self.errorMessage("please choose an algorithm to use.")
         self.refresh()
-       
+
 #        stop execution of python program
 
     def exit(self):
@@ -125,22 +125,22 @@ class UI:
 
     def LST(self):
         self.algorithmUsed.config(text="Algorithm: Least Slack Time")
-      
+
 
     def EDF(self):
         self.algorithmUsed.config(text="Algorithm: Earliest Deadline First")
-       
+
 
     def DMA(self):
         self.algorithmUsed.config(text="Algorithm: Deadline Monotonic Assignment")
-        
+
 
     def RMA(self):
         self.algorithmUsed.config(text="Algorithm: Rate Monotonic Assignment")
-        
+
     def RR(self):
         self.algorithmUsed.config(text="Algorithm: Round Robin")
-    
+
     def FCFS(self):
         self.algorithmUsed.config(text="Algorithm: First Come First Serve")
 
@@ -162,13 +162,13 @@ class UI:
 
         self.algorithmUsed = Label(self.second_frame, text="Algorithm: ", font=("times new roman", 14, "bold"), bg="#444444", fg="#8C5ADF")
         self.algorithmUsed.pack()
-        
+
 
         self.runFrame = Frame(self.second_frame, bg="#444444")
         Button(self.runFrame, text="RUN", font=("times new roman", 13, "bold"), bg="green", fg="white", bd=0, command= self.Run).pack(side=RIGHT, padx=5, pady=5)
 
         Label(self.runFrame, text="Max Time:", font=("times new roman", 12), bg="#444444", fg="white").pack(side=LEFT, padx=5, pady=5)
- 
+
         self.maxtimeEntry = Entry(self.runFrame, font=("times new roman", 12), justify= CENTER)
         self.maxtimeEntry.pack(side=LEFT, padx=5, pady=5)
 
@@ -180,7 +180,7 @@ class UI:
 
         self.second_frame.bind("<Configure>", lambda e: my_canvas.configure(scrollregion=my_canvas.bbox("all")))
 
-        
+
         # Add that New frame To a Window In The Canvas
         my_canvas.create_window((0, 0), window=self.second_frame, anchor="nw", tags='frame')
 
@@ -191,14 +191,14 @@ class UI:
         f = Frame(self.second_frame, bg="#4AA080")
         f.pack(fill=X, expand=True,pady=5)
         self.tasks.append(f)
-        
+
         Label(f, text=f"Task no.{num}", font=("times new roman", 12, "bold"), bg="#4AA080", fg="white").grid(row=0, column=0)
         Label(f, text="_____________________________________________________________________________________________________", bg="#4AA080", fg="white").grid(row=1, column=0)
 
         f2 = Frame(f, bg="#4AA080")
         f2.grid(row=2, column=0)
         f2.columnconfigure(0, weight=2)
- 
+
 
         if(self.algorithm_chosen.get() == "RR"):
             Label(f2, text= "Arrival time: ", font =("times new roman", 12), bg="#4AA080", fg="white").grid(row=0, column=1)
@@ -210,9 +210,19 @@ class UI:
             burstTime = Entry(f2, font=("times new roman", 12), justify= CENTER)
             burstTime.grid(row=1, column=2)
             self.btEntries.append(burstTime)
-       
+
             self.quantumEntryLabel.pack(side=LEFT, padx=5, pady=5)
             self.quantumEntry.pack(side=LEFT, padx=5, pady=5)
+        elif (self.algorithm_chosen.get() == "FCFS"):
+            Label(f2, text="Arrival time: ", font=("times new roman", 12), bg="#4AA080", fg="white").grid(row=0, column=1)
+            arrivalTime = Entry(f2, font=("times new roman", 12), justify=CENTER)
+            arrivalTime.grid(row=0, column=2)
+            self.atEntries.append(arrivalTime)
+
+            Label(f2, text="Burst time: ", font=("times new roman", 12), bg="#4AA080", fg="white").grid(row=1, column=1)
+            burstTime = Entry(f2, font=("times new roman", 12), justify=CENTER)
+            burstTime.grid(row=1, column=2)
+            self.btEntries.append(burstTime)
 
         else:
             Label(f2, text= "Period: ", font =("times new roman", 12), bg="#4AA080", fg="white").grid(row=0, column=1)
@@ -224,7 +234,7 @@ class UI:
             etEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
             etEntry.grid(row=1, column=2)
             self.etEntries.append(etEntry)
-            
+
 
             Label(f2, text="Deadline: ", font=("times new roman", 12), bg="#4AA080", fg="white").grid(row=2, column=1)
             dtEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
@@ -233,7 +243,7 @@ class UI:
             self.quantumEntryLabel.pack_forget()
             self.quantumEntry.pack_forget()
         Label(f, text="_____________________________________________________________________________________________________", bg="#4AA080", fg="white").grid(row=3, column=0)
- 
+
         self.runFrame.pack()
 
 
@@ -242,17 +252,17 @@ class UI:
         tasksNum = self.get_input_noTasks()
         for i in range(len(self.tasks)):
             self.tasks[i].destroy()
-         
+
         self.tasks = []
         self.etEntries = []
         self.ptEntries = []
         self.dtEntries = []
         self.atEntries = []
         self.btEntries = []
-      
+
         for i in range(tasksNum):
             self.task(i+1)
-        
+
 
     def Run(self):
         tasks = []
@@ -267,7 +277,7 @@ class UI:
                 maxTime = int(self.maxtimeEntry.get())
             except:
                 self.errorMessage("Please ensure that the max time is an integer number")
-    
+
 
         if self.checkEntries():
             if self.algorithm_chosen.get() == "LST":
@@ -291,12 +301,21 @@ class UI:
                     tasks.append({"name": f"T{arg + 1}", "arrival": float(self.atEntries[arg].get()), "burst": float(self.btEntries[arg].get())})
                 roundRobin(tasks,quantumTime, maxTime)
             elif self.algorithm_chosen.get() == "FCFS":
-                for arg in range(len(self.ptEntries)):
-                    tasks.append({"name": f"T{arg + 1}", "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
+                # for arg in range(len(self.ptEntries)):
+
+                tasks = []
+                for arg in range(len(self.atEntries)):
+                    tasks.append({
+                        "name": f"T{arg + 1}",
+                        "arrival": float(self.atEntries[arg].get()),
+                        "burst": float(self.btEntries[arg].get())
+                    })
+
+                    # tasks.append({"name": f"T{arg + 1}", "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
                 FCFS(tasks, maxTime)
             else:
                 self.errorMessage("please choose an algorithm to use.")
-        
+
 
 
     def errorMessage(self, msg):
@@ -322,6 +341,6 @@ class UI:
                     self.errorMessage("Please ensure that all entries are filled either with integer or float numbers")
                     return False
             return True
- 
+
 
 UI()

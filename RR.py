@@ -13,7 +13,7 @@ def roundRobin(tasks,quantum, maxTime):
     queue = []
     time = 0
     arrivedProcesses = 0
-    readyProcesses = 0  
+    readyProcesses = 0
     done=0
     start=0
 
@@ -37,14 +37,14 @@ def roundRobin(tasks,quantum, maxTime):
                     chart.append(queue[0]["name"])
                 time+=quantum
                 queue[0]["burst"]-=quantum
-            else:   
+            else:
                 for g in range(int(time),int(time+queue[0]["burst"])):
                     chart.append(queue[0]["name"])
                 time+=queue[0]["burst"]
                 queue[0]["burst"]=0
-                done+=1 
+                done+=1
                 readyProcesses-=1
-            start=1   
+            start=1
     output = []
     for i,value in enumerate(chart):
         output.append((i,value))
