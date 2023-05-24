@@ -36,10 +36,6 @@ def Read_data(tasks) :
     for i, task in enumerate(tasks):
         task["priority"] = i + 1
 
-    # hyperperiod = tasks[0]["periodTime"]
-    # for task in tasks[1:]:
-    #     hyperperiod = lcm(hyperperiod, task["periodTime"])
-
     # Storing data in a dictionary
     for  i in range(n):
         dList[tasks[i]['name']] = {"start":[],"finish":[]}
@@ -124,7 +120,7 @@ def Simulation(tasks, hp):
         priority = estimatePriority(RealTime_task,tasks, hp)
         # print("\n\tPriority of the task: ", priority)
         if (priority != -1):    #processor is not idle
-            # print("\nt{}-->t{} :{}".format(t,t+1,RealTime_task[priority]["name"]))
+            print("\nt{}-->t{} :{}".format(t,t+1,RealTime_task[priority]["name"]))
             # Update WCET after each clock cycle
             RealTime_task[priority]["executionTime"] -= 1
             # For the calculation of the metrics
@@ -136,7 +132,7 @@ def Simulation(tasks, hp):
             to_x.append(t+1)
 
         else:    #processor is idle
-            # print("\nt{}-->t{} :IDLE".format(t,t+1))
+            print("\nt{}-->t{} :IDLE".format(t,t+1))
             # For the calculation of the metrics
             dList["TASK_IDLE"]["start"].append(t)
             dList["TASK_IDLE"]["finish"].append(t+1)
@@ -151,8 +147,6 @@ def Simulation(tasks, hp):
             if (RealTime_task[i]["periodTime"] == 0):
                 RealTime_task[i] = copy.deepcopy(tasks[i])
 
-        # with open('RM_sched.json','w') as outfile2:
-        #     json.dump(dList,outfile2,indent = 4)
 
 def drawGantt(tasks):
 	"""
@@ -182,6 +176,3 @@ def RMA(tasks, hyperperiod):
 
     else:
         sched_res = Schedulablity(tasks)
-
-# if __name__ == '__main__':
-#     RMA(tasks, 20)
