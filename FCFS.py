@@ -43,30 +43,34 @@ def drawGantt(tasks, maxtime):
 def FCFS(tasks , maxtime):
     # Sort tasks based on arrival time (assuming tasks is a list of dictionaries with "arrival" and "burst" keys)
     sorted_tasks = sorted(tasks, key=lambda x: x["arrival"])
+    print(sorted_tasks)
     order=[]
     # Calculate waiting time and turn around time for each task
     waiting_time = 0
-    total_waiting_time = float("-inf")
+    total_waiting_time = 0
     turn_around_time = 0
     total_turn_around_time = 0
 
     print("Tasks\t\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time")
     for task in sorted_tasks:
         # Calculate waiting time for current task
-        waiting_time = max(total_waiting_time - task["arrival"], 0)
+        waiting_time = max(total_turn_around_time - task["arrival"], 0)
 
         # Calculate start time for current task
-        start_time = max(task["arrival"], total_waiting_time)
+        start_time = max(task["arrival"], total_turn_around_time)
 
-        # Update total waiting time
-        total_waiting_time += task["burst"]
+        # Calculate turn around time for current task
+        turn_around_time = start_time + task["burst"]
+
+        # Update total waiting time and total turn around time
+        total_waiting_time += waiting_time
+        total_turn_around_time += turn_around_time - start_time
 
         # Append the task to the order list
-        order.append({"name": task["name"], "start_time": start_time, "finish_time": start_time + task["burst"]})
+        order.append({"name": task["name"], "start_time": start_time, "finish_time": turn_around_time})
 
         # Print task details
         print(f"{task['name']}\t\t{task['arrival']}\t\t{task['burst']}\t\t{waiting_time}\t\t{turn_around_time}")
-
 
     # Calculate average waiting time and turn around time
     n = len(sorted_tasks)

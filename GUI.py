@@ -85,7 +85,7 @@ class UI:
         self.root.protocol("WM_DELETE_WINDOW", self.exit)
         self.root.mainloop()
 
-    def validate_input_noTasks(input_string):
+    def validate_input_noTasks(self , input_string):
         if int(input_string):
             return True
         elif input_string == "":
