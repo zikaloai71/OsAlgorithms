@@ -33,10 +33,10 @@ def drawGantt(tasks, maxtime):
     ax = fig.add_subplot(111)
     # the data is plotted from_x to to_x along y_axis
     ax = plt.hlines(y_axis, from_x, to_x, linewidth=20, color = colors[len(tasks)-1])
-    plt.title('Rate Monotonic scheduling')
+    plt.title('First Come First Serve Scheduling')
     plt.grid(True)
-    plt.xlabel("Real-Time clock")
-    plt.ylabel("HIGH------------------Priority--------------------->LOW")
+    # plt.xlabel("Real-Time clock")
+    # plt.ylabel("HIGH------------------Priority--------------------->LOW")
     plt.xticks(range(maxtime+1))
     plt.show()
 
