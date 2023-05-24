@@ -143,14 +143,19 @@ class UI:
 
         self.algorithmUsed = Label(self.second_frame, text="Algorithm: ", font=("times new roman", 14, "bold"), bg="#444444", fg="#8C5ADF")
         self.algorithmUsed.pack()
+        
 
         self.runFrame = Frame(self.second_frame, bg="#444444")
         Button(self.runFrame, text="RUN", font=("times new roman", 13, "bold"), bg="green", fg="white", bd=0, command= self.Run).pack(side=RIGHT, padx=5, pady=5)
 
         Label(self.runFrame, text="Max Time:", font=("times new roman", 12), bg="#444444", fg="white").pack(side=LEFT, padx=5, pady=5)
-
+ 
         self.maxtimeEntry = Entry(self.runFrame, font=("times new roman", 12), justify= CENTER)
         self.maxtimeEntry.pack(side=LEFT, padx=5, pady=5)
+
+        self.quantumEntryLabel = Label(self.runFrame, text="Quantum:", font=("times new roman", 12), bg="#444444", fg="white")
+        self.quantumEntry = Entry(self.runFrame, font=("times new roman", 12), justify= CENTER)
+
         # Add that New frame To a Window In The Canvas
         my_canvas.create_window((0, 0), window=self.second_frame, anchor="nw", tags='frame')
 
@@ -186,33 +191,39 @@ class UI:
             burstTime = Entry(f2, font=("times new roman", 12), justify= CENTER)
             burstTime.grid(row=1, column=2)
             self.btEntries.append(burstTime)
+       
+            self.quantumEntryLabel.pack(side=LEFT, padx=5, pady=5)
+            self.quantumEntry.pack(side=LEFT, padx=5, pady=5)
+
         else:
+            Label(f2, text= "Period: ", font =("times new roman", 12), bg="#4AA080", fg="white").grid(row=0, column=1)
+            ptEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
+            ptEntry.grid(row=0, column=2)
+            self.ptEntries.append(ptEntry)
+
             Label(f2, text= "Execution time: ", font =("times new roman", 12), bg="#4AA080", fg="white").grid(row=1, column=1)
             etEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
             etEntry.grid(row=1, column=2)
             self.etEntries.append(etEntry)
+      
 
-            Label(f2, text= "Period: ", font =("times new roman", 12), bg="#4AA080", fg="white").grid(row=0, column=3)
-            ptEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
-            ptEntry.grid(row=0, column=4)
-            self.ptEntries.append(ptEntry)
-
-            Label(f2, text="Deadline: ", font=("times new roman", 12), bg="#4AA080", fg="white").grid(row=1, column=3)
+            Label(f2, text="Deadline: ", font=("times new roman", 12), bg="#4AA080", fg="white").grid(row=2, column=1)
             dtEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
-            dtEntry.grid(row=1, column=4)
+            dtEntry.grid(row=2, column=2)
             self.dtEntries.append(dtEntry)
+            
         Label(f, text="_____________________________________________________________________________________________________", bg="#4AA080", fg="white").grid(row=3, column=0)
+ 
         self.runFrame.pack()
 
 
 
     def refresh(self, *args):
-        
         tasksNum = self.get_input_noTasks()
-        
-      
         for i in range(len(self.tasks)):
             self.tasks[i].destroy()
+
+        self.quantumEntry.destroy()
 
         self.tasks = []
         self.etEntries = []
@@ -224,23 +235,21 @@ class UI:
         for i in range(tasksNum):
             self.task(i+1)
         
-      
-           
-      
-    
-
-        
-           
 
     def Run(self):
         tasks = []
-       
-        try:
-            maxTime = int(self.maxTimeEntry.get())
-            quantum = int(self.quantumEntry.get())
-        except:
-            self.errorMessage("Please ensure that the max time is an integer number")
-
+        if self.algorithm_chosen.get() == "RR":
+            try:
+                quantumTime = int(self.quantumEntry.get())
+                maxTime = int(self.maxtimeEntry.get())
+            except:
+                self.errorMessage("Please ensure that the max time is an integer number")
+        else:
+            try:
+                maxTime = int(self.maxtimeEntry.get())
+            except:
+                self.errorMessage("Please ensure that the max time is an integer number")
+    
 
         if self.checkEntries():
             if self.algorithm_chosen.get() == "LST":
@@ -262,7 +271,7 @@ class UI:
             elif self.algorithm_chosen.get() == "RR":
                 for arg in range(len(self.atEntries)):
                     tasks.append({"name": f"T{arg + 1}", "arrival": float(self.atEntries[arg].get()), "burst": float(self.btEntries[arg].get())})
-                roundRobin(tasks, quantum, maxTime)
+                roundRobin(tasks,quantumTime, maxTime)
             else:
                 self.errorMessage("please choose an algorithm to use.")
         
@@ -272,16 +281,25 @@ class UI:
         messagebox.showerror("Error", msg)
 
     def checkEntries(self):
-        for entry in range(len(self.ptEntries)):
-            try:
-              float(self.ptEntries[entry].get())
-              float(self.etEntries[entry].get())
-              float(self.dtEntries[entry].get())
-              float(self.atEntries[entry].get())
-              float(self.btEntries[entry].get())
-            except:
-                self.errorMessage("Please ensure that all entries are filled either with integer or float numbers")
-                return False
-        return True
+        if self.algorithm_chosen.get() == "RR":
+            for entry in range(len(self.atEntries)):
+                try:
+                    float(self.atEntries[entry].get())
+                    float(self.btEntries[entry].get())
+                except:
+                    self.errorMessage("Please ensure that all entries are filled either with integer or float numbers")
+                    return False
+            return True
+        else:
+            for entry in range(len(self.ptEntries)):
+                try:
+                    float(self.ptEntries[entry].get())
+                    float(self.etEntries[entry].get())
+                    float(self.dtEntries[entry].get())
+                except:
+                    self.errorMessage("Please ensure that all entries are filled either with integer or float numbers")
+                    return False
+            return True
+ 
 
 UI()
