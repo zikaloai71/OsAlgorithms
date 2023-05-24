@@ -59,9 +59,7 @@ def FCFS(tasks):
         print(str(tasks[i]["name"]) + "\t\t" + str(tasks[i]["executionTime"]) + "\t\t" + str(tasks[i]["periodTime"]) + "\t\t" + str(tasks[i]["waitingTime"]) + "\t\t" + str(tasks[i]["turnAroundTime"]))
         # Append the process id to the order list
         order.append({"name":tasks[i]["name"], "start_time":current_time, "finish_time":current_time + tasks[i]["executionTime"]})
-        # Update the start time and finish time of the process
-        # start_time[i] = current_time
-        # finish_time[i] = current_time + bt[i]
+     
         # Update the current time
         current_time += tasks[i]["executionTime"]
     print("Average waiting time = " + str(total_wt / n))

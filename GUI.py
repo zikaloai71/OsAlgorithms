@@ -10,7 +10,8 @@ from DMA import DMA
 from RMA import RMA
 from EDF import EDF
 from LST import LST
-from RRv2 import roundRobin
+from RR import roundRobin
+from FCFS import FCFS
 
 class UI:
     def __init__(self):
@@ -47,7 +48,7 @@ class UI:
         #select box
         self.algorithm_chosen = ttk.Combobox(self.inputFrame,width=12,justify=CENTER)
         #options for select box
-        self.algorithm_chosen['value']=( "LST", "EDF", "DMA", "RMA","RR")
+        self.algorithm_chosen['value']=( "LST", "EDF", "DMA", "RMA","RR","FCFS")
         self.algorithm_chosen.grid(row=2,column=2,pady=5)
         #default value for select box
         self.algorithm_chosen.current(0)
@@ -97,6 +98,8 @@ class UI:
             self.RMA()
         elif self.algorithm_chosen.get() == "RR":
             self.RR()
+        elif self.algorithm_chosen.get() == "FCFS":
+            self.FCFS()
         else:
             self.errorMessage("please choose an algorithm to use.")    
         self.refresh()
@@ -124,6 +127,9 @@ class UI:
         
     def RR(self):
         self.algorithmUsed.config(text="Algorithm: Round Robin")
+    
+    def FCFS(self):
+        self.algorithmUsed.config(text="Algorithm: First Come First Serve")
 
     def tasksFrame(self):
         my_canvas = Canvas(self.root, bg="#2069e0")
@@ -205,13 +211,14 @@ class UI:
             etEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
             etEntry.grid(row=1, column=2)
             self.etEntries.append(etEntry)
-      
+            
 
             Label(f2, text="Deadline: ", font=("times new roman", 12), bg="#4AA080", fg="white").grid(row=2, column=1)
             dtEntry = Entry(f2, font=("times new roman", 12), justify= CENTER)
             dtEntry.grid(row=2, column=2)
             self.dtEntries.append(dtEntry)
-            
+            self.quantumEntryLabel.pack_forget()
+            self.quantumEntry.pack_forget()
         Label(f, text="_____________________________________________________________________________________________________", bg="#4AA080", fg="white").grid(row=3, column=0)
  
         self.runFrame.pack()
@@ -222,9 +229,7 @@ class UI:
         tasksNum = self.get_input_noTasks()
         for i in range(len(self.tasks)):
             self.tasks[i].destroy()
-
-        self.quantumEntry.destroy()
-
+         
         self.tasks = []
         self.etEntries = []
         self.ptEntries = []
@@ -272,6 +277,10 @@ class UI:
                 for arg in range(len(self.atEntries)):
                     tasks.append({"name": f"T{arg + 1}", "arrival": float(self.atEntries[arg].get()), "burst": float(self.btEntries[arg].get())})
                 roundRobin(tasks,quantumTime, maxTime)
+            elif self.algorithm_chosen.get() == "FCFS":
+                for arg in range(len(self.ptEntries)):
+                    tasks.append({"name": f"T{arg + 1}", "periodTime": float(self.ptEntries[arg].get()),"deadLine": float(self.dtEntries[arg].get()), "executionTime": float(self.etEntries[arg].get())})
+                FCFS(tasks, maxTime)
             else:
                 self.errorMessage("please choose an algorithm to use.")
         

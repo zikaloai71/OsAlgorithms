@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 def shiftCL(queue):
     temp = queue[0]
     for i in range(len(queue)-1):
@@ -6,6 +8,7 @@ def shiftCL(queue):
     return queue
 
 def roundRobin(tasks,quantum, maxTime):
+    print(tasks)
     chart = []
     queue = []
     time = 0
@@ -30,12 +33,12 @@ def roundRobin(tasks,quantum, maxTime):
 
         if queue[0]["burst"] > 0:
             if(queue[0]["burst"] >quantum):
-                for g in range (time,time+quantum):
+                for g in range (int(time),int(time+quantum)):
                     chart.append(queue[0]["name"])
                 time+=quantum
                 queue[0]["burst"]-=quantum
             else:   
-                for g in range(time,time+queue[0]["burst"]):
+                for g in range(int(time),int(time+queue[0]["burst"])):
                     chart.append(queue[0]["name"])
                 time+=queue[0]["burst"]
                 queue[0]["burst"]=0
@@ -46,7 +49,6 @@ def roundRobin(tasks,quantum, maxTime):
     for i,value in enumerate(chart):
         output.append((i,value))
     output = output[:maxTime]
-    import matplotlib.pyplot as plt
 
     # your list of tuples
 
