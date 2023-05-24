@@ -32,9 +32,6 @@ def Read_data(tasks) :
     """
     global dList
     n = len(tasks)
-    # Assign priorities to the tasks (shorter periodTime = higher priority)
-    for i, task in enumerate(tasks):
-        task["priority"] = i + 1
 
     # Storing data in a dictionary
     for  i in range(n):
