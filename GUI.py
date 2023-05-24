@@ -23,6 +23,20 @@ class UI:
         self.root.geometry("650x550+400+100")
         #background color of window
         self.root.config(bg="red")
+
+        self.developer = Frame(self.root, bg="#333")
+        self.developer.pack(fill=X)
+        self.developer.columnconfigure(0, weight=2)
+        self.developer.columnconfigure(6, weight=2)
+        Label(self.developer, text="Developers Names:", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=1, column=3, padx=5, pady=5)
+        Label(self.developer, text="Zakaria Loai", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=2, column=1, padx=5, pady=5)
+        Label(self.developer, text="Mohamed Gad", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=2, column=2, padx=5, pady=5)
+        Label(self.developer, text="Mohamed Twfik", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=2, column=3, padx=5, pady=5)
+        Label(self.developer, text="Ramy Ahmed", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=2, column=4, padx=5, pady=5)
+        Label(self.developer, text="Rabeh Rabiee", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=2, column=5, padx=5, pady=5)
+
+
+
         #child of root window for no.of tasks input and choosing algorithm
         self.inputFrame = Frame(self.root, bg="#DDDDDD")
         #fill x means fill the window in x direction
@@ -40,7 +54,6 @@ class UI:
         self.tasks =[]   #   to enter no. of tasks 
         
 
-      
         #label for input frame tasks number
         Label(self.inputFrame, text="No.Tasks: ", font=("times new roman", 12, "bold"), bg="#DDDDDD").grid(row=1, column=1, pady=5)
         #label for input frame algorithm type

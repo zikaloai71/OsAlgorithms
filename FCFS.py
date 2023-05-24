@@ -74,10 +74,10 @@ def FCFS(tasks, maxtime):
     # Draw the gantt chart
     drawGantt(order, maxtime)
 
-# Driver code
-tasks = [
-    {"name":"Task2", "executionTime":5, "periodTime":15},
-    {"name":"Task1", "executionTime":10, "periodTime":20},
-    {"name":"Task3", "executionTime":8, "periodTime":25}
-]
-FCFS(tasks, 20)
+# # Driver code
+# tasks = [
+#     {"name":"Task2", "executionTime":5, "periodTime":15},
+#     {"name":"Task1", "executionTime":10, "periodTime":20},
+#     {"name":"Task3", "executionTime":8, "periodTime":25}
+# ]
+# FCFS(tasks, 20)
