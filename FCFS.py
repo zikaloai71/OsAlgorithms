@@ -46,16 +46,13 @@ def FCFS(tasks , maxtime):
     print(sorted_tasks)
     order=[]
     # Calculate waiting time and turn around time for each task
-    waiting_time = 0
-    total_waiting_time = 0
+
     turn_around_time = 0
     total_turn_around_time = 0
 
     print("Tasks\t\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time")
     for task in sorted_tasks:
         # Calculate waiting time for current task
-        waiting_time = max(total_turn_around_time - task["arrival"], 0)
-
         # Calculate start time for current task
         start_time = max(task["arrival"], total_turn_around_time)
 
@@ -63,21 +60,19 @@ def FCFS(tasks , maxtime):
         turn_around_time = start_time + task["burst"]
 
         # Update total waiting time and total turn around time
-        total_waiting_time += waiting_time
         total_turn_around_time += turn_around_time - start_time
 
         # Append the task to the order list
         order.append({"name": task["name"], "start_time": start_time, "finish_time": turn_around_time})
 
         # Print task details
-        print(f"{task['name']}\t\t{task['arrival']}\t\t{task['burst']}\t\t{waiting_time}\t\t{turn_around_time}")
 
-    # Calculate average waiting time and turn around time
-    n = len(sorted_tasks)
-    average_waiting_time = total_waiting_time / n
-    average_turn_around_time = total_turn_around_time / n
 
-    # Print average waiting time and turn around time
-    print(f"\nAverage Waiting Time: {average_waiting_time}")
-    print(f"Average Turnaround Time: {average_turn_around_time}")
     drawGantt(order, maxtime)
+tasks = [
+    {"name": "p1", "arrival": 0, "burst": 3},
+    {"name": "p2", "arrival": 3, "burst": 2},
+    {"name": "p3", "arrival": 2, "burst": 1},
+    {"name": "p4", "arrival": 1, "burst": 2},]
+maxTime = 8
+FCFS(tasks, maxTime)

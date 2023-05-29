@@ -57,10 +57,8 @@ def Schedulablity(tasks):
 
     U_factor = sum(U)
     if U_factor<=1:
-        print("\nUtilization factor: ",U_factor, "underloaded tasks")
 
         sched_util = n*(2**(1/n)-1)
-        print("Checking condition: ",sched_util)
 
         count = 0
         T.sort()
@@ -69,6 +67,7 @@ def Schedulablity(tasks):
                 count = count + 1
 
         # Checking the schedulablity condition
+
         if U_factor <= sched_util or count == len(T):
             print("\n\tTasks are schedulable by Rate Monotonic Scheduling!")
             return True
@@ -77,6 +76,32 @@ def Schedulablity(tasks):
             return False
     print("\n\tOverloaded tasks!")
     print("\n\tUtilization factor > 1")
+    return False
+
+import math
+
+def check_critical_instance(tasks):
+    """
+    Checks the existence of a critical instance based on the response time analysis.
+    Returns True if a critical instance exists; otherwise, returns False.
+    """
+    n = len(tasks)
+
+    # Sort tasks in ascending order of periods
+    tasks.sort(key=lambda x: int(x["periodTime"]))
+
+    for i, task in enumerate(tasks):
+        period = int(task["periodTime"])
+        execution_time = int(task["executionTime"])
+        for time in range(1, period + 1):
+            response_time = execution_time
+            for j in range(i):
+                prev_task = tasks[j]
+                response_time += math.ceil(time / int(prev_task["periodTime"])) * int(prev_task["executionTime"])
+            print(response_time, period)
+            if response_time > period:
+                return True
+
     return False
 
 def estimatePriority(RealTime_task,tasks, hp):
@@ -117,7 +142,6 @@ def Simulation(tasks, hp):
         priority = estimatePriority(RealTime_task,tasks, hp)
         # print("\n\tPriority of the task: ", priority)
         if (priority != -1):    #processor is not idle
-            print("\nt{}-->t{} :{}".format(t,t+1,RealTime_task[priority]["name"]))
             # Update WCET after each clock cycle
             RealTime_task[priority]["executionTime"] -= 1
             # For the calculation of the metrics
@@ -129,7 +153,6 @@ def Simulation(tasks, hp):
             to_x.append(t+1)
 
         else:    #processor is idle
-            print("\nt{}-->t{} :IDLE".format(t,t+1))
             # For the calculation of the metrics
             dList["TASK_IDLE"]["start"].append(t)
             dList["TASK_IDLE"]["finish"].append(t+1)
@@ -164,12 +187,26 @@ def drawGantt(tasks):
 
 def RMA(tasks, hyperperiod):
     """The main function"""
-    print("\n\n\t\t_RATE MONOTONIC SCHEDULER_\n")
     Read_data(tasks)
     sched_res = Schedulablity(tasks)
-    if sched_res == True:
+    # bound test for schedulablity  # critical instance test for schedulablity
+    if sched_res == True or not check_critical_instance(tasks) :
         Simulation(tasks ,hyperperiod)
         drawGantt(tasks)
 
     else:
-        sched_res = Schedulablity(tasks)
+        print("\n\tTasks are not schedulable by Rate Monotonic Scheduling!")
+
+tasks =[
+        {"name":"T1","periodTime":20,"executionTime":6},
+        {"name":"T2","periodTime":25,"executionTime":2},
+        {"name":"T3","periodTime":30,"executionTime":12},
+    ]
+tasks2 =[
+
+        {"name":"T1","periodTime":2,"executionTime":1},
+        {"name":"T2","periodTime":3,"executionTime":1},
+        {"name":"T3","periodTime":6,"executionTime":.5},
+]
+hyperperiod = 100
+RMA(tasks2, hyperperiod)
