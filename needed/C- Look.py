@@ -5,7 +5,7 @@ disk_size = 200
 # Function to perform C-LOOK on the request
 # array starting from the given head
 def CLOOK(arr, head):
-
+ 
 	seek_count = 0
 	distance = 0
 	cur_track = 0
@@ -13,7 +13,7 @@ def CLOOK(arr, head):
 	left = []
 	right = []
 
-	seek_sequence = []
+	seek_sequence = [head]
 
 	# Tracks on the left of the
 	# head will be serviced when
@@ -52,7 +52,7 @@ def CLOOK(arr, head):
 	# jump to the last track that
 	# is needed to be serviced in
 	# left direction
-	seek_count += abs(head - left[0])
+	# seek_count += abs(head - left[0]) #not calculated
 	head = left[0]
 
 	# Now service the requests again
@@ -91,4 +91,4 @@ print("Initial position of head:", head)
 
 CLOOK(arr, head)
 
-# This code is contributed by rag2127
+
