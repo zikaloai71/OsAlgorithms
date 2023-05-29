@@ -52,7 +52,7 @@ def CLOOK(arr, head):
 	# jump to the last track that
 	# is needed to be serviced in
 	# left direction
-	seek_count += abs(head - left[0])
+	# seek_count += abs(head - left[0])
 	head = left[0]
 
 	# Now service the requests again
@@ -90,5 +90,3 @@ head = 50
 print("Initial position of head:", head)
 
 CLOOK(arr, head)
-
-# This code is contributed by rag2127

@@ -71,6 +71,3 @@ if __name__ =="__main__":
 	proc = [176, 79, 34, 60,
 			92, 11, 41, 114]
 	shortestSeekTimeFirst(proc, 50)
-
-# This code is contributed by
-# Shubham Singh(SHUBHAMSINGH10)

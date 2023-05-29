@@ -14,7 +14,6 @@ def LST (tasks, maxTime) :
     schedule = []
     ready_queue = []
     time = 0
-    previous_task = None # keep track of the previous task
 
     # Store the original deadlines of each task
     original_deadlines = [task["deadLine"] for task in tasks]
@@ -47,8 +46,6 @@ def LST (tasks, maxTime) :
             else:
                 schedule.append((time, current_task["name"]))
                 current_task["remaining"] -= 1
-                # Update the previous task to the current task name
-                previous_task = current_task["name"]
                 # Check if the task is completed or needs to be added back to the ready queue
                 if current_task["remaining"] == 0:
                     print(f"Task {current_task['name']} is completed.")
@@ -97,10 +94,10 @@ def LST (tasks, maxTime) :
 def calculate_slack(task, time):
     return task['deadLine'] - time - task['remaining']
 
-LST([{"name": "p1", "periodTime": 20,"deadLine": 7, "executionTime": 3} ,
-        {"name": "p2", "periodTime": 5,"deadLine": 4, "executionTime": 2} ,
-        {"name": "p3", "periodTime": 10,"deadLine": 8, "executionTime": 2}
-], 20)
+# LST([{"name": "p1", "periodTime": 20,"deadLine": 7, "executionTime": 3} ,
+#         {"name": "p2", "periodTime": 5,"deadLine": 4, "executionTime": 2} ,
+#         {"name": "p3", "periodTime": 10,"deadLine": 8, "executionTime": 2}
+# ], 20)
 
 
 

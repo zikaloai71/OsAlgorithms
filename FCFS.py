@@ -2,18 +2,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-def findWaitingTime(tasks):
-    # Initialize the current time to zero
-    current_time = 0
-    # Loop through the tasks
-    for task in tasks:
-        # Calculate the turnaround time as the current time plus the burst time
-        task["turnAroundTime"] = current_time + task["executionTime"]
-        # Calculate the waiting time as the turnaround time minus the burst time
-        task["waitingTime"] = task["turnAroundTime"] - task["executionTime"]
-        # Update the current time by adding the burst time
-        current_time += task["executionTime"]
-
 def drawGantt(tasks, maxtime):
     """
     The scheduled results are displayed in the form of a
@@ -75,4 +63,4 @@ tasks = [
     {"name": "p3", "arrival": 2, "burst": 1},
     {"name": "p4", "arrival": 1, "burst": 2},]
 maxTime = 8
-FCFS(tasks, maxTime)
+# FCFS(tasks, maxTime)

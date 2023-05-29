@@ -91,5 +91,3 @@ head = 50
 direction = "right"
 
 SCAN(arr, head, direction)
-
-# This code is contributed by divyesh072019

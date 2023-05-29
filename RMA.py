@@ -209,4 +209,4 @@ tasks2 =[
         {"name":"T3","periodTime":6,"executionTime":.5},
 ]
 hyperperiod = 100
-RMA(tasks2, hyperperiod)
+# RMA(tasks2, hyperperiod)

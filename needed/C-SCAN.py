@@ -41,7 +41,7 @@ def CSCAN(arr, head, direction):
         # Once reached the left end,
         # jump to the right end.
         head = disk_size - 1
-        seek_count += disk_size - 1
+        # seek_count += disk_size - 1
 
         # Now service the requests
         # on the right side of the head.

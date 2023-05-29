@@ -27,15 +27,15 @@ class Process:
         return self.name
 
 class Semaphore:
-	class Value(Enum):
-		Zero = 0
-		One = 1
+    class Value(Enum):
+        Zero = 0
+        One = 1
 
-	def __init__(self):
-		self.q = Queue()
-		self.value = Semaphore.Value.One
+    def __init__(self):
+        self.q = Queue()
+        self.value = Semaphore.Value.One
 
-	def P(self,  p):
+    def P(self,  p):
             if self.value == Semaphore.Value.One:
                 self.value = Semaphore.Value.Zero
                 # print("Process {} is in critical section".format(p))
@@ -46,7 +46,7 @@ class Semaphore:
                 self.q.put(p)
                 p.Sleep()
 
-	def V(self, process):
+    def V(self, process):
             process.Done()
             if self.q.qsize() == 0:
                 s.value = Semaphore.Value.One

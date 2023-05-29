@@ -28,7 +28,7 @@ def roundRobin(tasks,quantum, maxTime):
             continue
 
         if start:
-           queue = shiftCL(queue)
+            queue = shiftCL(queue)
 
         if queue[0]["burst"] > 0:
             if(queue[0]["burst"] >quantum):
@@ -82,4 +82,4 @@ if __name__ == "__main__":
         {"name": "P2", "arrival": 3, "burst": 7},
         {"name": "P3", "arrival": 2, "burst": 3},]
 
-    roundRobin(tasks, 2, maxTime=20)
+    # roundRobin(tasks, 2, maxTime=20)

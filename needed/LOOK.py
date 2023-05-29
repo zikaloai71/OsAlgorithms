@@ -88,5 +88,3 @@ head = 50
 print("Initial position of head:", head)
 
 LOOK(arr, head)
-
-# This code is contributed by rag2127

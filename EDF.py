@@ -74,7 +74,7 @@ def EDF (tasks, maxTime) :
     plt.legend(loc="lower right")
     plt.show()
 
-EDF([{"name": "p1", "periodTime": 20,"deadLine": 7, "executionTime": 3} ,
-        {"name": "p2", "periodTime": 5,"deadLine": 4, "executionTime": 2} ,
-        {"name": "p3", "periodTime": 10,"deadLine": 8, "executionTime": 2}
-], 20)
+# EDF([{"name": "p1", "periodTime": 20,"deadLine": 7, "executionTime": 3} ,
+#         {"name": "p2", "periodTime": 5,"deadLine": 4, "executionTime": 2} ,
+#         {"name": "p3", "periodTime": 10,"deadLine": 8, "executionTime": 2}
+# ], 20)
