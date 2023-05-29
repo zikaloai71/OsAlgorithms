@@ -8,7 +8,7 @@ def CSCAN(arr, head, direction):
     cur_track = 0
     left = []
     right = []
-    seek_sequence = []
+    seek_sequence = [head]
 
     # Appending end values
     # which have to be visited
@@ -41,7 +41,7 @@ def CSCAN(arr, head, direction):
         # Once reached the left end,
         # jump to the right end.
         head = disk_size - 1
-        # seek_count += disk_size - 1
+        # seek_count += disk_size - 1 #not calculated 
 
         # Now service the requests
         # on the right side of the head.
@@ -65,7 +65,7 @@ def CSCAN(arr, head, direction):
         # Once reached the right end,
         # jump to the left end.
         head = 0
-        seek_count += disk_size - 1
+        # seek_count += disk_size - 1  # not calculated
 
         # Now service the requests
         # on the left side of the head.

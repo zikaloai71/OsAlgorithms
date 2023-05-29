@@ -57,6 +57,7 @@ class Semaphore:
                 # been sent for CS
                 self.q.get()
                 p.Run()
+
 # test code
 if __name__ == "__main__":
 

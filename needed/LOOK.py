@@ -1,4 +1,4 @@
-# Python3 implementation of the approach
+
 size = 8
 disk_size = 200
 
@@ -13,7 +13,7 @@ def LOOK(arr, head):
 	left = []
 	right = []
 
-	seek_sequence = []
+	seek_sequence = [head]
 
 	# Tracks on the left of the
 	# head will be serviced when
@@ -88,3 +88,5 @@ head = 50
 print("Initial position of head:", head)
 
 LOOK(arr, head)
+
+

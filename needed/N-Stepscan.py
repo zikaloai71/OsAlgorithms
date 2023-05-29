@@ -21,12 +21,14 @@ def NStepScan(requests, head, n):
             for track in range(head, max(sub_section) + 1):
                 if track in sub_section:
                     seek_count += abs(track - head)
+                    print(track, head)
                     head = track
         else:
             for track in range(head, min(sub_section) - 1, -1):
                 if track in sub_section:
                     seek_count += abs(track - head)
                     head = track
+                   
 
     return seek_count
 

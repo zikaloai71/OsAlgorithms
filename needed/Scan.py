@@ -1,4 +1,4 @@
-# Python3 program to demonstrate
+
 # SCAN Disk Scheduling algorithm
 size = 8
 disk_size = 200
@@ -9,7 +9,7 @@ def SCAN(arr, head, direction):
 	distance, cur_track = 0, 0
 	left = []
 	right = []
-	seek_sequence = []
+	seek_sequence = [head]
 
 	# Appending end values
 	# which has to be visited

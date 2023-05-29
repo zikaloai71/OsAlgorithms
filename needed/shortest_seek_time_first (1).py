@@ -7,7 +7,7 @@ def calculateDifference(queue, head, diff):
 	for i in range(len(diff)):
 		diff[i][0] = abs(queue[i] - head)
 
-# find unaccessed track which is
+# find un-accessed track which is
 # at minimum distance from head
 def findMin(diff):
 
@@ -71,3 +71,5 @@ if __name__ =="__main__":
 	proc = [176, 79, 34, 60,
 			92, 11, 41, 114]
 	shortestSeekTimeFirst(proc, 50)
+
+
