@@ -1,7 +1,7 @@
 def NStepScan(requests, head, n):
     seek_count = 0
     direction = 1  # 1 for moving towards higher track numbers, -1 for moving towards lower track numbers
-
+    sequence = [head]
     # Sort the requests in ascending order
     requests.sort()
 
@@ -21,21 +21,25 @@ def NStepScan(requests, head, n):
             for track in range(head, max(sub_section) + 1):
                 if track in sub_section:
                     seek_count += abs(track - head)
-                    print(track, head)
+                    # print(track, head)
                     head = track
+                    sequence.append(head)
+
         else:
             for track in range(head, min(sub_section) - 1, -1):
                 if track in sub_section:
                     seek_count += abs(track - head)
+                    print(track, head)
                     head = track
-                   
+                    sequence.append(head)
 
-    return seek_count
+    return sequence, seek_count
 
 # Example usage
 requests = [176, 79, 34, 60, 92, 11, 41, 114]
 head = 50
 n = 4
 
-seek_count = NStepScan(requests, head, n)
+sequence, seek_count = NStepScan(requests, head, n)
+print("Sequenze: ", sequence)
 print("Total number of seek operations =", seek_count)
