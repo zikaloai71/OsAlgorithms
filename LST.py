@@ -9,16 +9,16 @@ def LST (tasks, maxTime) :
     # Hyperperiod or LCM
     print (tasks)
     hyperperiod = maxTime
-    
+
     # Scheduling
     schedule = []
     ready_queue = []
     time = 0
     previous_task = None # keep track of the previous task
-    
+
     # Store the original deadlines of each task
     original_deadlines = [task["deadLine"] for task in tasks]
-    
+
     while time < hyperperiod:
         # Add any new tasks that arrive at the current time to the ready queue
         for i, task in enumerate(tasks):
@@ -28,7 +28,7 @@ def LST (tasks, maxTime) :
                 task["deadLine"] = time + original_deadlines[i]
                 task["remaining"] = task["executionTime"]
                 ready_queue.append(task.copy())
-                
+
         # Calculate the slack time of each task in the ready queue
         for task in ready_queue:
             task["slack"] = calculate_slack(task, time)
@@ -54,14 +54,14 @@ def LST (tasks, maxTime) :
                     print(f"Task {current_task['name']} is completed.")
                 else:
                     ready_queue.append(current_task)
-            
-                
+
+
         else:
             schedule.append((time, None))
-            
-        # Increment the current time by one unit    
+
+        # Increment the current time by one unit
         time += 1
-    
+
     # Plotting
     plt.figure(figsize=(10, 5))
     plt.hlines(
@@ -70,10 +70,10 @@ def LST (tasks, maxTime) :
         xmax=[hyperperiod] * len(tasks),
         color="gray",
     )
-    
+
     # Use a color map or a list of colors to assign a color to each task
     cmap = plt.get_cmap("tab10")
-    
+
     for start, name in schedule:
         if name:
             end = start + 1 # assuming one unit of execution time per cycle
@@ -97,6 +97,10 @@ def LST (tasks, maxTime) :
 def calculate_slack(task, time):
     return task['deadLine'] - time - task['remaining']
 
+LST([{"name": "p1", "periodTime": 20,"deadLine": 7, "executionTime": 3} ,
+        {"name": "p2", "periodTime": 5,"deadLine": 4, "executionTime": 2} ,
+        {"name": "p3", "periodTime": 10,"deadLine": 8, "executionTime": 2}
+], 20)
 
 
 

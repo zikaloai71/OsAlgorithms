@@ -12,12 +12,12 @@ def DMA (tasks,maxtime) :
     # Hyperperiod or LCM
     print (tasks, maxtime)
     hyperperiod = maxtime
-    
+
     # Deadline monotonic priority assignment
     tasks.sort(key=lambda task: task["deadLine"])
     for i, task in enumerate(tasks):
         task["priority"] = i + 1
-    
+
     # Scheduling
     schedule = []
     ready_queue = []
@@ -37,7 +37,7 @@ def DMA (tasks,maxtime) :
         else:
             schedule.append((time, None))
             time += 1
-    
+
     # Plotting
     plt.figure(figsize=(10, 5))
     plt.hlines(
@@ -70,3 +70,7 @@ def DMA (tasks,maxtime) :
     plt.show()
 
 
+DMA([{"name": "p1", "periodTime": 20,"deadLine": 7, "executionTime": 3} ,
+        {"name": "p2", "periodTime": 5,"deadLine": 4, "executionTime": 2} ,
+        {"name": "p3", "periodTime": 10,"deadLine": 8, "executionTime": 2}
+], 20)

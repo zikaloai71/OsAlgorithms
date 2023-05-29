@@ -3,12 +3,11 @@ import matplotlib.pyplot as plt
 def shiftCL(queue):
     temp = queue[0]
     for i in range(len(queue)-1):
-        queue[i] = queue[i+1]
-    queue[len(queue)-1] = temp
+        queue[i]=queue[i+1]
+    queue[len(queue)-1]=temp
     return queue
 
 def roundRobin(tasks,quantum, maxTime):
-    print(tasks)
     chart = []
     queue = []
     time = 0
@@ -42,6 +41,7 @@ def roundRobin(tasks,quantum, maxTime):
                     chart.append(queue[0]["name"])
                 time+=queue[0]["burst"]
                 queue[0]["burst"]=0
+                queue.pop(0)
                 done+=1
                 readyProcesses-=1
             start=1
@@ -76,3 +76,10 @@ def roundRobin(tasks,quantum, maxTime):
     plt.grid(True)
     plt.show()
 
+if __name__ == "__main__":
+    tasks = [
+        {"name": "P1", "arrival": 0, "burst": 5},
+        {"name": "P2", "arrival": 3, "burst": 7},
+        {"name": "P3", "arrival": 2, "burst": 3},]
+
+    roundRobin(tasks, 2, maxTime=20)
